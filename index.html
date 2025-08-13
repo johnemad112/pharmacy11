@@ -4,51 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صيدلية أونلاين</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: 'Tahoma', sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+        header { background-color: #1abc9c; color: white; padding: 15px; text-align: center; }
+        nav a { color: white; margin: 0 10px; text-decoration: none; }
+        section { padding: 20px; background-color: white; margin: 15px auto; width: 80%; border-radius: 8px; box-shadow: 0px 0px 10px #ccc; }
+        h2 { color: #1abc9c; }
+        footer { background-color: #1abc9c; color: white; text-align: center; padding: 10px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .product { background-color: white; border-radius: 8px; box-shadow: 0 0 10px #ccc; padding: 15px; text-align: center; }
+        .product img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+        .buy-btn { background-color: #1abc9c; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .buy-btn:hover { background-color: #16a085; }
+        #search-box { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        #cart ul { list-style: none; padding: 0; }
+        #cart li { padding: 8px; border-bottom: 1px solid #eee; }
+        #orderForm input, #orderForm textarea { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; }
+        #orderForm button { background-color: #1abc9c; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+        #orderForm button:hover { background-color: #16a085; }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
     <script>
         (function() {
-            emailjs.init("YOUR_PUBLIC_KEY"); /* ضع المفتاح العام من EmailJS */
+            emailjs.init("8SqqGgc0d5DFfyqn4");
         })();
     </script>
 </head>
 <body>
+    <header>
+        <h1>💊 صيدلية أونلاين</h1>
+        <nav>
+            <a href="#products">المنتجات</a>
+            <a href="#cart">السلة</a>
+            <a href="#order">إتمام الطلب</a>
+        </nav>
+    </header>
 
-<header>
-    <h1>صيدلية أونلاين</h1>
-    <nav>
-        <a href="#products">المنتجات</a>
-        <a href="#cart">سلة المشتريات (<span id="cart-count">0</span>)</a>
-    </nav>
-</header>
+    <section id="products">
+        <h2>🛍 المنتجات</h2>
+        <input type="text" id="search-box" placeholder="ابحث عن منتج..." onkeyup="searchProducts()">
+        <div class="product-grid" id="product-list"></div>
+    </section>
 
-<section id="products">
-    <h2>قائمة المنتجات</h2>
-    <input type="text" id="search-box" placeholder="ابحث عن منتج..." oninput="searchProducts()">
-    <div class="product-grid" id="product-list"></div>
-</section>
+    <section id="cart">
+        <h2>🛒 سلة المشتريات (<span id="cart-count">0</span>)</h2>
+        <ul id="cart-items"></ul>
+        <p>الإجمالي: <span id="cart-total">0</span> ريال</p>
+    </section>
 
-<section id="cart">
-    <h2>سلة المشتريات</h2>
-    <ul id="cart-items"></ul>
-    <p>الإجمالي: <span id="cart-total">0</span> ريال</p>
-</section>
+    <section id="order">
+        <h2>📦 إتمام الطلب</h2>
+        <form id="orderForm">
+            <input type="text" id="buyer_name" placeholder="الاسم الكامل" required>
+            <input type="tel" id="buyer_phone" placeholder="رقم الهاتف" required>
+            <input type="email" id="buyer_email" placeholder="البريد الإلكتروني" required>
+            <textarea id="buyer_address" placeholder="العنوان الكامل" required></textarea>
+            <button type="submit">إرسال الطلب</button>
+        </form>
+    </section>
 
-<section id="order">
-    <h2>إتمام الطلب</h2>
-    <form id="orderForm">
-        <input type="text" id="buyer_name" placeholder="الاسم" required>
-        <input type="tel" id="buyer_phone" placeholder="رقم الهاتف" required>
-        <input type="email" id="buyer_email" placeholder="البريد الإلكتروني" required>
-        <input type="text" id="buyer_address" placeholder="العنوان" required>
-        <button type="submit">إرسال الطلب</button>
-    </form>
-</section>
+    <footer>
+        <p>جميع الحقوق محفوظة © 2025</p>
+    </footer>
 
-<footer>
-    <p>© 2025 جميع الحقوق محفوظة</p>
-</footer>
+    <script>
+        const products = [
+            { name: "بنادول", price: 20, description: "مسكن آلام وخافض حرارة", img: "https://i.imgur.com/4Hk8Ygk.jpg" },
+            { name: "فيتامين C", price: 15, description: "مكمل غذائي يقوي المناعة", img: "https://i.imgur.com/TYN7iMZ.jpg" },
+            { name: "جهاز قياس ضغط", price: 120, description: "لقياس ضغط الدم بدقة", img: "https://i.imgur.com/3J32B6O.jpg" },
+            { name: "ميزان حرارة", price: 25, description: "لقياس درجة الحرارة", img: "https://i.imgur.com/3dGJKnR.jpg" }
+        ];
 
-<script src="script.js"></script>
+        let cart = [];
+
+        function displayProducts() {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+            products.forEach((product, index) => {
+                productList.innerHTML += `
+                    <div class="product">
+                        <img src="${product.img}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <p>السعر: ${product.price} ريال</p>
+                        <input type="number" min="1" value="1" id="qty-${index}">
+                        <button class="buy-btn" onclick="addToCart(${index})">أضف للسلة</button>
+                    </div>
+                `;
+            });
+        }
+
+        function searchProducts() {
+            const searchText = document.getElementById("search-box").value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(searchText));
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+            filtered.forEach((product, index) => {
+                productList.innerHTML += `
+                    <div class="product">
+                        <img src="${product.img}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <p>السعر: ${product.price} ريال</p>
+                        <input type="number" min="1" value="1" id="qty-${index}">
+                        <button class="buy-btn" onclick="addToCart(${products.indexOf(product)})">أضف للسلة</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToCart(index) {
+            const qty = parseInt(document.getElementById(`qty-${index}`).value);
+            for (let i = 0; i < qty; i++) {
+                cart.push(products[index]);
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById("cart-items");
+            const cartCount = document.getElementById("cart-count");
+            const cartTotal = document.getElementById("cart-total");
+            cartItems.innerHTML = "";
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+                cartItems.innerHTML += `<li>${item.name} - ${item.price} ريال</li>`;
+            });
+            cartCount.textContent = cart.length;
+            cartTotal.textContent = total;
+        }
+
+        document.getElementById("orderForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const buyer_name = document.getElementById("buyer_name").value;
+            const buyer_phone = document.getElementById("buyer_phone").value;
+            const buyer_email = document.getElementById("buyer_email").value;
+            const buyer_address = document.getElementById("buyer_address").value;
+            const order_list = cart.map(item => `${item.name} - ${item.price} ريال`).join("\n");
+            const order_total = document.getElementById("cart-total").textContent;
+
+            const templateParams = {
+                buyer_name,
+                buyer_phone,
+                buyer_email,
+                buyer_address,
+                order_list,
+                order_total
+            };
+
+            emailjs.send("service_hdeh0fm", "template_3l1brbl", templateParams)
+                .then(function() {
+                    alert("✅ تم إرسال الطلب بنجاح!");
+                    cart = [];
+                    updateCart();
+                    document.getElementById("orderForm").reset();
+                }, function(error) {
+                    alert("❌ حدث خطأ أثناء إرسال الطلب!");
+                    console.error(error);
+                });
+        });
+
+        displayProducts();
+    </script>
 </body>
 </html>
