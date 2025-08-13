@@ -1,0 +1,116 @@
+body {
+    font-family: 'Tahoma', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    direction: rtl;
+}
+
+header {
+    background-color: #1abc9c;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+section {
+    padding: 20px;
+    background-color: white;
+    margin: 15px auto;
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+h2 {
+    color: #1abc9c;
+}
+
+footer {
+    background-color: #1abc9c;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.product {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+    padding: 15px;
+    text-align: center;
+}
+
+.product img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.buy-btn {
+    display: inline-block;
+    background-color: #1abc9c;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.buy-btn:hover {
+    background-color: #16a085;
+}
+
+#search-box {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#cart ul {
+    list-style: none;
+    padding: 0;
+}
+
+#cart li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+#orderForm input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#orderForm button {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#orderForm button:hover {
+    background-color: #16a085;
+}
